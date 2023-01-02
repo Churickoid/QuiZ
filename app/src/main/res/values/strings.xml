@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">quizAPI</string>
+    <string name="theme">Theme: %1$s</string>
+</resources>
