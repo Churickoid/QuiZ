@@ -7,10 +7,10 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/themeTextView"
+        android:id="@+id/categoryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/theme"
+        android:text="@string/category"
         app:layout_constraintBottom_toTopOf="@id/timerProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,28 +19,53 @@
         android:id="@+id/timerProgressBar"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintBottom_toTopOf="@id/lifeTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/themeTextView"
+        app:layout_constraintTop_toBottomOf="@id/categoryTextView"
+        android:max="30"
+        android:progress="25"
+        android:indeterminateOnly="false"
+        android:background="@drawable/timer"
         />
     <TextView
-        android:id="@+id/timerTextView"
+    android:id="@+id/timerTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="32sp"
+    android:text="25"
+    app:layout_constraintBottom_toBottomOf="@id/timerProgressBar"
+    app:layout_constraintEnd_toEndOf="@id/timerProgressBar"
+    app:layout_constraintStart_toStartOf="@id/timerProgressBar"
+    app:layout_constraintTop_toTopOf="@id/timerProgressBar"/>
+    <TextView
+        android:id="@+id/lifeTextView"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="32sp"
-        android:text="25"
-        app:layout_constraintBottom_toBottomOf="@id/timerProgressBar"
-        app:layout_constraintEnd_toEndOf="@id/timerProgressBar"
-        app:layout_constraintStart_toStartOf="@id/timerProgressBar"
-        app:layout_constraintTop_toTopOf="@id/timerProgressBar"/>
+        android:textSize="24sp"
+        android:text="@string/lives"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintEnd_toStartOf="@id/scoreTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timerProgressBar"/>
+    <TextView
+        android:id="@+id/scoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="@string/total_score"
+        app:layout_constraintBottom_toBottomOf="@id/lifeTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/lifeTextView"
+        app:layout_constraintTop_toTopOf="@id/lifeTextView"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3"/>
+        app:layout_constraintGuide_percent="0.25"/>
 
     <LinearLayout
         android:id="@+id/buttonsLL"
@@ -68,7 +93,7 @@
             android:layout_weight="1"
             android:textSize="18sp"
             android:layout_marginVertical="8dp"
-            android:text="Answer"
+            android:text="@string/answer"
             android:textAllCaps="false"
              />
         <Button
@@ -78,7 +103,7 @@
             android:layout_weight="1"
             android:textSize="18sp"
             android:layout_marginVertical="8dp"
-            android:text="Answer"
+            android:text="@string/answer"
             android:textAllCaps="false"
             />
         <Button
@@ -88,7 +113,7 @@
             android:layout_weight="1"
             android:textSize="18sp"
             android:layout_marginVertical="8dp"
-            android:text="Answer"
+            android:text="@string/answer"
             android:textAllCaps="false"
              />
         <Button
@@ -98,7 +123,7 @@
             android:layout_weight="1"
             android:textSize="18sp"
             android:layout_marginVertical="8dp"
-            android:text="Answer"
+            android:text="@string/answer"
             android:textAllCaps="false"
             />
 
