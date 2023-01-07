@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.answer2Button.setOnClickListener(this)
         binding.answer3Button.setOnClickListener(this)
         binding.answer4Button.setOnClickListener(this)
+
         viewModel.round.observe(this){
             binding.categoryTextView.text = getString(R.string.category, it.category)
             binding.questionTextView.text = it.question
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.answer3Button.text = it.answers[2]
             binding.answer4Button.text = it.answers[3]
         }
+
         viewModel.session.observe(this){
             binding.lifeTextView.text = getString(R.string.lives, it.lives)
             binding.scoreTextView.text = getString(R.string.total_score, it.score)

@@ -84,6 +84,7 @@
             android:layout_weight="1"
             android:textSize="28sp"
             android:text="Question"
+            android:textStyle="bold"
             android:gravity="center"
             />
         <Button
