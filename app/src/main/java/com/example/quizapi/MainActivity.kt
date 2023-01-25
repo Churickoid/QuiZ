@@ -1,5 +1,6 @@
 package com.example.quizapi
 
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -34,10 +35,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.answer4Button.text = it.answers[3]
         }
 
-        viewModel.session.observe(this){
-            binding.lifeTextView.text = getString(R.string.lives, it.lives)
-            binding.scoreTextView.text = getString(R.string.total_score, it.score)
-
+        viewModel.lives.observe(this){
+            binding.lifeTextView.text = getString(R.string.lives, it)
+        }
+        viewModel.score.observe(this){
+            binding.scoreTextView.text = getString(R.string.total_score, it)
+        }
+        viewModel.timer.observe(this){
+            binding.timerTextView.text = it.toString()
+            binding.timerProgressBar.progress = it
+        }
+        viewModel.spinner.observe(this){
+            if(it){
+                binding.loading.visibility = View.VISIBLE
+                binding.buttonsLL.visibility = View.INVISIBLE
+            }
+            else{
+                binding.loading.visibility = View.INVISIBLE
+                binding.buttonsLL.visibility = View.VISIBLE
+            }
         }
 
 

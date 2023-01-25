@@ -10,5 +10,5 @@ data class Round(
     @SerializedName("correctAnswer")
     val correct: String,
     @SerializedName("incorrectAnswers")
-    var answers: List<String>
+    var answers: MutableList<String>
 )

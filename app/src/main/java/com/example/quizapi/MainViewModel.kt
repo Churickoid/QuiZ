@@ -7,60 +7,80 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapi.data.ApiInterface
-import com.example.quizapi.model.QuestionRepository
 import com.example.quizapi.model.Round
 import com.example.quizapi.model.Session
-import com.example.quizapi.model.SessionUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
+import kotlin.random.Random
 
 class MainViewModel(
-    private val sessionUseCase:SessionUseCase,
     private val retrofit: ApiInterface
 ): ViewModel() {
 
+
     private val _round = MutableLiveData<Round>()
-    private val _session = MutableLiveData<Session>()
-
     val round: LiveData<Round> = _round
-    val session: LiveData<Session> = _session
 
+    private val _lives = MutableLiveData<Int>()
+    private val _score = MutableLiveData<Int>()
+    private val _timer = MutableLiveData<Int>()
+
+    val lives: LiveData<Int> = _lives
+    val score: LiveData<Int> = _score
+    val timer: LiveData<Int> = _timer
+
+    private val _spinner = MutableLiveData(false)
+    val spinner: LiveData<Boolean> = _spinner
 
     init{
         startSession()
+        makeTimer()
     }
     fun checkAnswer(buttonId: Int){
-        if (round.value!!.answers[buttonId]== round.value!!.correct){
-            _session.value = sessionUseCase.increaseScore()
-        }
-        else{
-            _session.value = sessionUseCase.decreaseLive()
-        }
-        loadRound()
+        if (getCorrectAnswer()== getCurrentAnswer(buttonId)) _score.value = _score.value!! + 1
+        else _lives.value = _lives.value!! - 1
+
+        if (_lives.value == 0) startSession()
+        else loadRound()
     }
 
 
     private fun loadRound() {
         viewModelScope.launch() {
-                val response = retrofit.getQuestionList()
-                if (response.isSuccessful) {
-                    val round = response.body()!!.get(0)
-                    round.answers += round.correct
-                    round.answers.shuffled()
-                    _round.value = round
-                } else {
-                    Log.e("Error","FURT")
-                }
+            _spinner.value = true
+            val response = retrofit.getQuestionList()
+            val round = response[0]
+            round.answers += round.correct
+            round.answers.shuffle()
+            _round.value = round
 
+            _spinner.value = false
+            _timer.value = 30
     }
 
     }
     private fun startSession(){
-        _session.value = sessionUseCase.createSession()
+        _score.value = 0
+        _lives.value = 3
         loadRound()
     }
 
+    private fun getCorrectAnswer():String{
+        return round.value!!.correct
+    }
+    private fun getCurrentAnswer(buttonId: Int):String{
+        if (buttonId == -1) return  ""
+        return round.value!!.answers[buttonId]
+    }
+    private fun makeTimer(){
+        viewModelScope.launch() {
+            delay(1000)
+            _timer.value = _timer.value!! - 1
+            if (_timer.value == 0){
+                checkAnswer(-1)
+            }
+            makeTimer()
+        }
+    }
 
 }

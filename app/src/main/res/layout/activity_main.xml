@@ -24,16 +24,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/categoryTextView"
         android:max="30"
-        android:progress="25"
-        android:indeterminateOnly="false"
-        android:background="@drawable/timer"
+        android:progress="30"
+        style="@style/CircularDeterminateProgressBar"
         />
     <TextView
     android:id="@+id/timerTextView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textSize="32sp"
-    android:text="25"
+    android:text="30"
     app:layout_constraintBottom_toBottomOf="@id/timerProgressBar"
     app:layout_constraintEnd_toEndOf="@id/timerProgressBar"
     app:layout_constraintStart_toStartOf="@id/timerProgressBar"
@@ -66,7 +65,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.25"/>
-
+    <ProgressBar
+        android:id="@+id/loading"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+         />
     <LinearLayout
         android:id="@+id/buttonsLL"
         android:layout_width="match_parent"
@@ -77,16 +86,26 @@
         app:layout_constraintTop_toBottomOf="@id/guideline"
         android:orientation="vertical"
         android:layout_marginHorizontal="16dp">
-        <TextView
-            android:id="@+id/questionTextView"
+
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="28sp"
-            android:text="Question"
-            android:textStyle="bold"
-            android:gravity="center"
-            />
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:fillViewport="true"
+            >
+            <TextView
+                android:id="@+id/questionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="28sp"
+                android:text="Question"
+                android:textStyle="bold"
+                android:gravity="center"
+                />
+        </ScrollView>
+
+
         <Button
             android:id="@+id/answer1Button"
             android:layout_width="match_parent"
