@@ -11,6 +11,7 @@ import com.example.quizapi.model.Round
 import com.example.quizapi.model.Session
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.Retrofit
 import kotlin.random.Random
 
 class MainViewModel(
@@ -29,12 +30,14 @@ class MainViewModel(
     val score: LiveData<Int> = _score
     val timer: LiveData<Int> = _timer
 
-    private val _spinner = MutableLiveData(false)
-    val spinner: LiveData<Boolean> = _spinner
+    private val _panel = MutableLiveData(true)
+    val panel: LiveData<Boolean> = _panel
 
+    private val _error = MutableLiveData(false)
+    val error: LiveData<Boolean> = _error
     init{
         startSession()
-        makeTimer()
+        startTimer()
     }
     fun checkAnswer(buttonId: Int){
         if (getCorrectAnswer()== getCurrentAnswer(buttonId)) _score.value = _score.value!! + 1
@@ -45,17 +48,27 @@ class MainViewModel(
     }
 
 
-    private fun loadRound() {
+    fun loadRound() {
         viewModelScope.launch() {
-            _spinner.value = true
-            val response = retrofit.getQuestionList()
-            val round = response[0]
-            round.answers += round.correct
-            round.answers.shuffle()
-            _round.value = round
+            _panel.value = false
+            _error.value = false
+            _timer.value = -1
+            try {
+                val response = retrofit.getQuestionList()
 
-            _spinner.value = false
-            _timer.value = 30
+                val round = response[0]
+                round.answers += round.correct
+                round.answers.shuffle()
+
+                _round.value = round
+                _panel.value = true
+                _timer.value = 30
+            }
+            catch(e: Exception){
+                _error.value = true
+            }
+
+
     }
 
     }
@@ -72,15 +85,19 @@ class MainViewModel(
         if (buttonId == -1) return  ""
         return round.value!!.answers[buttonId]
     }
-    private fun makeTimer(){
+    private fun startTimer(){
         viewModelScope.launch() {
-            delay(1000)
-            _timer.value = _timer.value!! - 1
-            if (_timer.value == 0){
-                checkAnswer(-1)
-            }
-            makeTimer()
+            _timer.value = 30
+            tick()
         }
+    }
+    private suspend fun tick(){
+        _timer.value = _timer.value!! - 1
+        if (_timer.value == 0){
+            checkAnswer(-1)
+        }
+        delay(1000)
+        tick()
     }
 
 }

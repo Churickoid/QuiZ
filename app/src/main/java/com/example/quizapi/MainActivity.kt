@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.answer3Button.setOnClickListener(this)
         binding.answer4Button.setOnClickListener(this)
 
+        binding.errorButton.setOnClickListener(this)
+
         viewModel.round.observe(this){
             binding.categoryTextView.text = getString(R.string.category, it.category)
             binding.questionTextView.text = it.question
@@ -45,14 +47,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.timerTextView.text = it.toString()
             binding.timerProgressBar.progress = it
         }
-        viewModel.spinner.observe(this){
+        viewModel.panel.observe(this){
             if(it){
-                binding.loading.visibility = View.VISIBLE
-                binding.buttonsLL.visibility = View.INVISIBLE
-            }
-            else{
                 binding.loading.visibility = View.INVISIBLE
                 binding.buttonsLL.visibility = View.VISIBLE
+                binding.timerTextView.visibility = View.VISIBLE
+            }
+            else{
+                binding.loading.visibility = View.VISIBLE
+                binding.buttonsLL.visibility = View.INVISIBLE
+                binding.timerTextView.visibility = View.INVISIBLE
+            }
+        }
+        viewModel.error.observe(this){
+            if(it){
+                binding.loading.visibility = View.INVISIBLE
+                binding.errorButton.visibility = View.VISIBLE
+
+            }
+            else{
+                binding.loading.visibility = View.VISIBLE
+                binding.errorButton.visibility = View.INVISIBLE
             }
         }
 
@@ -61,12 +76,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        viewModel.checkAnswer(when(v.id){
-            R.id.answer1Button -> 0
-            R.id.answer2Button -> 1
-            R.id.answer3Button -> 2
-            R.id.answer4Button -> 3
-            else -> 4
-        })
+        when(v.id){
+            R.id.answer1Button -> viewModel.checkAnswer(0)
+            R.id.answer2Button -> viewModel.checkAnswer(1)
+            R.id.answer3Button -> viewModel.checkAnswer(2)
+            R.id.answer4Button -> viewModel.checkAnswer(3)
+            else -> viewModel.loadRound()
+        }
     }
 }
