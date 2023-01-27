@@ -1,13 +1,20 @@
 package com.example.quizapi.model
 
-import com.example.quizapi.data.DataSource
+
+import com.example.quizapi.data.ApiInterface
+
 
 class QuestionRepository(
-    private val dataSource: DataSource
+    private val retrofit: ApiInterface
 ) {
-    private var questions: List<Round>? = null
-     fun getQuestions(num:Int) {
 
+    suspend fun getQuestion(): Round {
+        val response = retrofit.getQuestionList()
+
+        val round = response[0]
+        round.answers += round.correct
+        round.answers.shuffle()
+        return round
     }
 
 }

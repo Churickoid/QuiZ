@@ -1,9 +1,7 @@
-package com.example.quizapi.utils
+package com.example.quizapi.DI
 
 import com.example.quizapi.data.ApiInterface
 import com.example.quizapi.model.QuestionRepository
-import com.example.quizapi.data.LocalDataSource
-import com.example.quizapi.data.RemoteDataSource
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -27,7 +25,5 @@ class DIContainer {
         .build()
         .create(ApiInterface::class.java)
 
-    private val localDataSource = LocalDataSource()
-    private val remoteDataSource = RemoteDataSource(retrofit)
-    val questionRepository = QuestionRepository(remoteDataSource)
+    val questionRepository = QuestionRepository(retrofit)
 }

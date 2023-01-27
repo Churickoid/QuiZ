@@ -1,16 +1,14 @@
-package com.example.quizapi
+package com.example.quizapi.screens
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.LifecycleOwner
+import com.example.quizapi.R
 
 
 import com.example.quizapi.databinding.ActivityMainBinding
-import com.example.quizapi.utils.ViewModelFactory
-import com.example.quizapi.utils.factory
+import com.example.quizapi.factory
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 

@@ -1,21 +1,21 @@
-package com.example.quizapi
+package com.example.quizapi.screens
 
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.quizapi.data.ApiInterface
+
+import com.example.quizapi.model.QuestionRepository
 import com.example.quizapi.model.Round
-import com.example.quizapi.model.Session
+
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import kotlin.random.Random
+
 
 class MainViewModel(
-    private val retrofit: ApiInterface
+    private val repository: QuestionRepository
 ): ViewModel() {
 
 
@@ -54,21 +54,13 @@ class MainViewModel(
             _error.value = false
             _timer.value = -1
             try {
-                val response = retrofit.getQuestionList()
-
-                val round = response[0]
-                round.answers += round.correct
-                round.answers.shuffle()
-
-                _round.value = round
+                _round.value = repository.getQuestion()
                 _panel.value = true
                 _timer.value = 30
             }
             catch(e: Exception){
                 _error.value = true
             }
-
-
     }
 
     }

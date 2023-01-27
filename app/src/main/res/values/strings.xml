@@ -5,4 +5,10 @@
     <string name="lives">Lives: %1$d</string>
     <string name="total_score">Total score: %1$d</string>
     <string name="try_again">Try Again</string>
+    <string name="list_of_themes">List of Themes</string>
+    <string name="start">Start Quiz</string>
+    <string name="your_score">Your Score:</string>
+    <string name="high_score">High Score:</string>
+    <string name="restart">Restart</string>
+    <string name="menu">Menu</string>
 </resources>
