@@ -9,9 +9,11 @@ import androidx.lifecycle.viewModelScope
 
 import com.example.quizapi.model.QuestionRepository
 import com.example.quizapi.model.Round
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 
 
 class MainViewModel(
@@ -35,24 +37,38 @@ class MainViewModel(
 
     private val _error = MutableLiveData(false)
     val error: LiveData<Boolean> = _error
+
+    private val _buttonId = MutableLiveData<Int>()
+    val buttonId: LiveData<Int> = _buttonId
+
     init{
         startSession()
         startTimer()
     }
     fun checkAnswer(buttonId: Int){
-        if (getCorrectAnswer()== getCurrentAnswer(buttonId)) _score.value = _score.value!! + 1
-        else _lives.value = _lives.value!! - 1
+        if (getCorrectAnswer()== getCurrentAnswer(buttonId)){
+            _score.value = _score.value!! + 1
+            _buttonId.value = buttonId
+        }
+        else {
+            _lives.value = _lives.value!! - 1
+            _buttonId.value = buttonId+4
+        }
+        viewModelScope.launch(){
+            _timer.value = -1
+            delay(500)
+            _buttonId.value = buttonId+8
+            if (_lives.value == 0) startSession()
+            else loadRound()
+        }
 
-        if (_lives.value == 0) startSession()
-        else loadRound()
     }
 
 
     fun loadRound() {
-        viewModelScope.launch() {
+        viewModelScope.launch{
             _panel.value = false
             _error.value = false
-            _timer.value = -1
             try {
                 _round.value = repository.getQuestion()
                 _panel.value = true

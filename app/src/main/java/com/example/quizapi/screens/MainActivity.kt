@@ -1,14 +1,15 @@
 package com.example.quizapi.screens
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.example.quizapi.R
-
-
 import com.example.quizapi.databinding.ActivityMainBinding
-import com.example.quizapi.factory
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -42,19 +43,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.scoreTextView.text = getString(R.string.total_score, it)
         }
         viewModel.timer.observe(this){
-            binding.timerTextView.text = it.toString()
-            binding.timerProgressBar.progress = it
+            if (it >= 0){
+                binding.timerTextView.text = it.toString()
+                binding.timerProgressBar.progress = it
+            }
+
         }
         viewModel.panel.observe(this){
             if(it){
                 binding.loading.visibility = View.INVISIBLE
                 binding.buttonsLL.visibility = View.VISIBLE
-                binding.timerTextView.visibility = View.VISIBLE
             }
             else{
                 binding.loading.visibility = View.VISIBLE
                 binding.buttonsLL.visibility = View.INVISIBLE
-                binding.timerTextView.visibility = View.INVISIBLE
             }
         }
         viewModel.error.observe(this){
@@ -66,6 +68,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             else{
                 binding.loading.visibility = View.VISIBLE
                 binding.errorButton.visibility = View.INVISIBLE
+            }
+        }
+        viewModel.buttonId.observe(this){
+            val currentButton = findViewById<Button>(getButtonId(it))
+            when(it/4){
+                0 -> currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
+                1 -> currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                else -> currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
             }
         }
 
@@ -81,5 +91,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.answer4Button -> viewModel.checkAnswer(3)
             else -> viewModel.loadRound()
         }
+    }
+
+    private fun getButtonId(id: Int): Int{
+        return when(id%4){
+            0 -> R.id.answer1Button
+            1 -> R.id.answer2Button
+            2 -> R.id.answer3Button
+            else -> R.id.answer4Button
+        }
+
     }
 }
