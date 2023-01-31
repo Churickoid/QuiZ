@@ -1,4 +1,4 @@
-package com.example.quizapi.screens
+package com.example.quizapi.screens.game
 
 
 
@@ -9,14 +9,12 @@ import androidx.lifecycle.viewModelScope
 
 import com.example.quizapi.model.QuestionRepository
 import com.example.quizapi.model.Round
-import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 
-class MainViewModel(
+class GameViewModel(
     private val repository: QuestionRepository
 ): ViewModel() {
 
@@ -41,6 +39,12 @@ class MainViewModel(
     private val _buttonId = MutableLiveData<Int>()
     val buttonId: LiveData<Int> = _buttonId
 
+    private val _end= MutableLiveData<Boolean>()
+    val end: LiveData<Boolean> = _end
+
+    private val _disabled= MutableLiveData<Boolean>()
+    val disabled: LiveData<Boolean> = _disabled
+
     init{
         startSession()
         startTimer()
@@ -56,9 +60,11 @@ class MainViewModel(
         }
         viewModelScope.launch(){
             _timer.value = -1
+            _disabled.value = true
             delay(500)
+            _disabled.value = false
             _buttonId.value = buttonId+8
-            if (_lives.value == 0) startSession()
+            if (_lives.value == 0) _end.value = true
             else loadRound()
         }
 
@@ -90,19 +96,19 @@ class MainViewModel(
         return round.value!!.correct
     }
     private fun getCurrentAnswer(buttonId: Int):String{
-        if (buttonId == -1) return  ""
+        if (buttonId == 4) return  ""
         return round.value!!.answers[buttonId]
     }
     private fun startTimer(){
         viewModelScope.launch() {
-            _timer.value = 30
+            _timer.value = -1
             tick()
         }
     }
     private suspend fun tick(){
-        _timer.value = _timer.value!! - 1
+        _timer.postValue(_timer.value!! - 1)
         if (_timer.value == 0){
-            checkAnswer(-1)
+            checkAnswer(4)
         }
         delay(1000)
         tick()

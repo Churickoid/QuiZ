@@ -1,25 +1,26 @@
-package com.example.quizapi.screens
+package com.example.quizapi.screens.game
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.service.autofill.OnClickAction
 import android.view.View
 import android.widget.Button
-import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.quizapi.R
-import com.example.quizapi.databinding.ActivityMainBinding
+import com.example.quizapi.databinding.FragmentGameBinding
+import com.example.quizapi.screens.factory
+
+class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener{
+    private lateinit var binding: FragmentGameBinding
+    private val viewModel: GameViewModel by viewModels{ factory() }
 
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentGameBinding.bind(view)
 
-    private lateinit var binding: ActivityMainBinding
-    private val viewModel: MainViewModel by viewModels{ factory() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         binding.answer1Button.setOnClickListener(this)
         binding.answer2Button.setOnClickListener(this)
         binding.answer3Button.setOnClickListener(this)
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.errorButton.setOnClickListener(this)
 
-        viewModel.round.observe(this){
+        viewModel.round.observe(viewLifecycleOwner){
             binding.categoryTextView.text = getString(R.string.category, it.category)
             binding.questionTextView.text = it.question
             binding.answer1Button.text = it.answers[0]
@@ -36,20 +37,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             binding.answer4Button.text = it.answers[3]
         }
 
-        viewModel.lives.observe(this){
+        viewModel.lives.observe(viewLifecycleOwner){
             binding.lifeTextView.text = getString(R.string.lives, it)
         }
-        viewModel.score.observe(this){
+        viewModel.score.observe(viewLifecycleOwner){
             binding.scoreTextView.text = getString(R.string.total_score, it)
         }
-        viewModel.timer.observe(this){
+        viewModel.timer.observe(viewLifecycleOwner){
             if (it >= 0){
                 binding.timerTextView.text = it.toString()
                 binding.timerProgressBar.progress = it
             }
 
         }
-        viewModel.panel.observe(this){
+        viewModel.panel.observe(viewLifecycleOwner){
             if(it){
                 binding.loading.visibility = View.INVISIBLE
                 binding.buttonsLL.visibility = View.VISIBLE
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 binding.buttonsLL.visibility = View.INVISIBLE
             }
         }
-        viewModel.error.observe(this){
+        viewModel.error.observe(viewLifecycleOwner){
             if(it){
                 binding.loading.visibility = View.INVISIBLE
                 binding.errorButton.visibility = View.VISIBLE
@@ -70,16 +71,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 binding.errorButton.visibility = View.INVISIBLE
             }
         }
-        viewModel.buttonId.observe(this){
-            val currentButton = findViewById<Button>(getButtonId(it))
+        viewModel.buttonId.observe(viewLifecycleOwner){
+            val currentButton = view.findViewById<Button>(getButtonId(it))
             when(it/4){
-                0 -> currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
-                1 -> currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                else -> currentButton.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
+                0 -> currentButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+                1 -> currentButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                else -> currentButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
             }
         }
-
-
+        viewModel.end.observe(viewLifecycleOwner){
+            if(it){
+                findNavController().navigate(R.id.action_gameFragment_to_endFragment)
+            }
+        }
+        viewModel.disabled.observe(viewLifecycleOwner){
+            if(it){
+                binding.answer1Button.isClickable = false
+                binding.answer2Button.isClickable = false
+                binding.answer3Button.isClickable = false
+                binding.answer4Button.isClickable = false
+            }
+            else{
+                binding.answer1Button.isClickable = true
+                binding.answer2Button.isClickable = true
+                binding.answer3Button.isClickable = true
+                binding.answer4Button.isClickable = true
+            }
+        }
 
     }
 
@@ -102,4 +120,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
 }
