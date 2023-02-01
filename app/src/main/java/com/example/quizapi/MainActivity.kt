@@ -21,4 +21,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+    companion object{
+        const val APP_PREFERENCE = "APP_PREFERENCE"
+        const val SCORE_VALUE = "SCORE_VALUE"
+    }
 }

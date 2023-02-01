@@ -1,5 +1,7 @@
 package com.example.quizapi.screens.game
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.service.autofill.OnClickAction
 import android.view.View
@@ -8,6 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.quizapi.MainActivity.Companion.APP_PREFERENCE
+import com.example.quizapi.MainActivity.Companion.SCORE_VALUE
 import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentGameBinding
 import com.example.quizapi.screens.factory
@@ -15,8 +19,7 @@ import com.example.quizapi.screens.factory
 class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener{
     private lateinit var binding: FragmentGameBinding
     private val viewModel: GameViewModel by viewModels{ factory() }
-
-
+    private lateinit var preferences:SharedPreferences
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentGameBinding.bind(view)
@@ -80,9 +83,13 @@ class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener{
             }
         }
         viewModel.end.observe(viewLifecycleOwner){
-            if(it){
-                findNavController().navigate(R.id.action_gameFragment_to_endFragment)
-            }
+                 preferences = requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
+                 if(it>preferences.getInt(SCORE_VALUE, 0))
+                     preferences.edit()
+                     .putInt(SCORE_VALUE, it)
+                     .apply()
+                findNavController().navigate(R.id.action_gameFragment_to_endFragment )
+
         }
         viewModel.disabled.observe(viewLifecycleOwner){
             if(it){

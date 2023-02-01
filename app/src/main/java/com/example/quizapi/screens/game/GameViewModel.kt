@@ -18,7 +18,6 @@ class GameViewModel(
     private val repository: QuestionRepository
 ): ViewModel() {
 
-
     private val _round = MutableLiveData<Round>()
     val round: LiveData<Round> = _round
 
@@ -39,8 +38,8 @@ class GameViewModel(
     private val _buttonId = MutableLiveData<Int>()
     val buttonId: LiveData<Int> = _buttonId
 
-    private val _end= MutableLiveData<Boolean>()
-    val end: LiveData<Boolean> = _end
+    private val _end= MutableLiveData<Int>()
+    val end: LiveData<Int> = _end
 
     private val _disabled= MutableLiveData<Boolean>()
     val disabled: LiveData<Boolean> = _disabled
@@ -64,7 +63,7 @@ class GameViewModel(
             delay(500)
             _disabled.value = false
             _buttonId.value = buttonId+8
-            if (_lives.value == 0) _end.value = true
+            if (_lives.value == 0) _end.value = _score.value
             else loadRound()
         }
 
