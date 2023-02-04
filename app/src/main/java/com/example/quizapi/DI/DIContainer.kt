@@ -2,6 +2,7 @@ package com.example.quizapi.DI
 
 import com.example.quizapi.data.ApiInterface
 import com.example.quizapi.model.QuestionRepository
+import com.example.quizapi.model.ThemesRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,4 +27,5 @@ class DIContainer {
         .create(ApiInterface::class.java)
 
     val questionRepository = QuestionRepository(retrofit)
+    val themesRepository = ThemesRepository(retrofit)
 }

@@ -9,4 +9,7 @@ interface ApiInterface{
     @GET("api/questions")
     suspend fun getQuestionList(@Query("limit") num:Int = 1 ): List<Round>
 
+    @GET("api/categories")
+    suspend fun getThemesList(@Query("limit") num:Int = 1 ): Map<String, Array<String>>
+
 }

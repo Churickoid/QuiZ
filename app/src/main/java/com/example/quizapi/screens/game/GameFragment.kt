@@ -83,12 +83,14 @@ class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener{
             }
         }
         viewModel.end.observe(viewLifecycleOwner){
-                 preferences = requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
-                 if(it>preferences.getInt(SCORE_VALUE, 0))
-                     preferences.edit()
-                     .putInt(SCORE_VALUE, it)
-                     .apply()
-                findNavController().navigate(R.id.action_gameFragment_to_endFragment )
+            preferences = requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
+            if(it>preferences.getInt(SCORE_VALUE, 0))
+                preferences.edit()
+                    .putInt(SCORE_VALUE, it)
+                    .apply()
+
+            findNavController().navigate(R.id.action_gameFragment_to_endFragment )
+
 
         }
         viewModel.disabled.observe(viewLifecycleOwner){

@@ -64,6 +64,7 @@ class GameViewModel(
             _disabled.value = false
             _buttonId.value = buttonId+8
             if (_lives.value == 0) _end.value = _score.value
+
             else loadRound()
         }
 

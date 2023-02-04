@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.quizapi.App
 import com.example.quizapi.screens.game.GameViewModel
+import com.example.quizapi.screens.menu.MenuViewModel
 import java.lang.IllegalStateException
 
 class ViewModelFactory(private val app: App) : ViewModelProvider.Factory {
@@ -13,6 +14,9 @@ class ViewModelFactory(private val app: App) : ViewModelProvider.Factory {
         val viewModel = when(modelClass){
             GameViewModel :: class.java -> {
                 GameViewModel(app.container.questionRepository)
+            }
+            MenuViewModel :: class.java -> {
+                MenuViewModel(app.container.themesRepository)
             }
             else ->{
                 throw IllegalStateException("Unknown View model class")
