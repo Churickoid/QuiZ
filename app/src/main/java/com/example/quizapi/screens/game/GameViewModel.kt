@@ -21,6 +21,8 @@ class GameViewModel(
     private val _round = MutableLiveData<Round>()
     val round: LiveData<Round> = _round
 
+    var oneButtonClicked = true
+
     private val _lives = MutableLiveData<Int>()
     private val _score = MutableLiveData<Int>()
     private val _timer = MutableLiveData<Int>()
@@ -49,6 +51,9 @@ class GameViewModel(
         startTimer()
     }
     fun checkAnswer(buttonId: Int){
+        if (!oneButtonClicked) return
+        oneButtonClicked= false
+        _disabled.value = true
         if (getCorrectAnswer()== getCurrentAnswer(buttonId)){
             _score.value = _score.value!! + 1
             _buttonId.value = buttonId
@@ -57,13 +62,13 @@ class GameViewModel(
             _lives.value = _lives.value!! - 1
             _buttonId.value = buttonId+4
         }
+
         viewModelScope.launch(){
             _timer.value = -1
-            _disabled.value = true
             delay(500)
-            _disabled.value = false
             _buttonId.value = buttonId+8
-            if (_lives.value == 0) _end.value = _score.value
+            _disabled.value = false
+            if (_lives.value!! <= 0) _end.value = _score.value
 
             else loadRound()
         }
@@ -76,6 +81,7 @@ class GameViewModel(
             _panel.value = false
             _error.value = false
             try {
+                oneButtonClicked= true
                 _round.value = repository.getQuestion()
                 _panel.value = true
                 _timer.value = 30

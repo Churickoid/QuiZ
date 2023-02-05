@@ -39,7 +39,7 @@ class MenuFragment: Fragment(R.layout.fragment_menu) {
         }
     }
 
-    fun setupRecyclerView(){
+    private fun setupRecyclerView(){
         themesAdapter = ThemesAdapter()
         binding.themesRecyclerView.adapter = themesAdapter
     }

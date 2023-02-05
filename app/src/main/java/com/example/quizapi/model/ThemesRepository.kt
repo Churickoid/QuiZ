@@ -1,6 +1,5 @@
 package com.example.quizapi.model
 
-import android.util.Log
 import com.example.quizapi.data.ApiInterface
 
 class ThemesRepository (private val retrofit: ApiInterface){
@@ -18,7 +17,9 @@ class ThemesRepository (private val retrofit: ApiInterface){
     }
 
     fun changeActiveById(id :Int):List<Theme>{
-        themes[id].isActive = !themes[id].isActive
+        val changedTheme = themes[id].copy(isActive = !themes[id].isActive)
+        themes = ArrayList(themes)
+        themes[id] = changedTheme
         return themes
     }
 

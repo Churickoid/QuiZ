@@ -10,6 +10,9 @@ import kotlinx.coroutines.launch
 
 class MenuViewModel(private val themesRepository: ThemesRepository) : ViewModel() {
 
+    private val _error = MutableLiveData(false)
+    val error: LiveData<Boolean> = _error
+
     private val _themesList = MutableLiveData<List<Theme>>()
     val themesList:LiveData<List<Theme>> = _themesList
     init{
@@ -24,11 +27,12 @@ class MenuViewModel(private val themesRepository: ThemesRepository) : ViewModel(
 
     private fun getList(){
         viewModelScope.launch{
+            _error.value = false
             try {
                 _themesList.value = themesRepository.getThemes()
             }
             catch (e:Exception){
-
+                _error.value = true
             }
 
         }

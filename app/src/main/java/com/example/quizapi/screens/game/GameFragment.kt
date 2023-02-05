@@ -16,7 +16,7 @@ import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentGameBinding
 import com.example.quizapi.screens.factory
 
-class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener{
+class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener,View.OnLongClickListener{
     private lateinit var binding: FragmentGameBinding
     private val viewModel: GameViewModel by viewModels{ factory() }
     private lateinit var preferences:SharedPreferences
@@ -119,6 +119,11 @@ class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener{
             else -> viewModel.loadRound()
         }
     }
+
+    override fun onLongClick(p0: View?): Boolean {
+        return false
+    }
+
 
     private fun getButtonId(id: Int): Int{
         return when(id%4){
