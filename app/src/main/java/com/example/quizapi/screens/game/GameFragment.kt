@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.service.autofill.OnClickAction
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -14,12 +16,21 @@ import com.example.quizapi.MainActivity.Companion.APP_PREFERENCE
 import com.example.quizapi.MainActivity.Companion.SCORE_VALUE
 import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentGameBinding
+import com.example.quizapi.navigation.navigator
 import com.example.quizapi.screens.factory
 
-class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener,View.OnLongClickListener{
+class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
     private lateinit var binding: FragmentGameBinding
     private val viewModel: GameViewModel by viewModels{ factory() }
     private lateinit var preferences:SharedPreferences
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_game, container, false)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentGameBinding.bind(view)
@@ -30,7 +41,7 @@ class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener,View.
         binding.answer4Button.setOnClickListener(this)
 
         binding.errorButton.setOnClickListener(this)
-
+        viewModel.startSession()
         viewModel.round.observe(viewLifecycleOwner){
             binding.categoryTextView.text = getString(R.string.category, it.category)
             binding.questionTextView.text = it.question
@@ -83,14 +94,16 @@ class GameFragment: Fragment(R.layout.fragment_game), View.OnClickListener,View.
             }
         }
         viewModel.end.observe(viewLifecycleOwner){
-            preferences = requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
-            if(it>preferences.getInt(SCORE_VALUE, 0))
-                preferences.edit()
-                    .putInt(SCORE_VALUE, it)
-                    .apply()
+            if (it>-1) {
+                preferences =
+                    requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
+                if (it > preferences.getInt(SCORE_VALUE, 0))
+                    preferences.edit()
+                        .putInt(SCORE_VALUE, it)
+                        .apply()
 
-            findNavController().navigate(R.id.action_gameFragment_to_endFragment )
-
+                navigator().openEndScreen(it)
+            }
 
         }
         viewModel.disabled.observe(viewLifecycleOwner){

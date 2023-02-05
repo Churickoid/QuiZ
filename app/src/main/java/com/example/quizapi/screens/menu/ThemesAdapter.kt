@@ -15,7 +15,6 @@ import com.example.quizapi.model.Theme
 
 
 class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
-    var count = 0
     var themeList = listOf<Theme>()
         set(value){
             val callback = ThemesDiffCallback(themeList,value)
@@ -35,7 +34,6 @@ class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ThemesViewHolder, position: Int) {
-        Log.d("ShopListAdapter", "onBindViewHolder, count: ${++count}")
         val themeElem = themeList[position]
         holder.themeText.text = themeElem.themeName
         holder.themeCheckBox.isChecked = themeElem.isActive

@@ -52,6 +52,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
+    <Button
+        android:id="@+id/errorButton"
+        android:visibility="invisible"
+        android:text="@string/try_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintTop_toBottomOf="@id/listTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/themesRecyclerView"
         android:layout_width="match_parent"
@@ -62,7 +74,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginHorizontal="32dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_theme"
+
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

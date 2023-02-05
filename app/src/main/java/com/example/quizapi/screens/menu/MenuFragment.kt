@@ -2,22 +2,31 @@ package com.example.quizapi.screens.menu
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.quizapi.MainActivity
 import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentMenuBinding
+import com.example.quizapi.navigation.navigator
 import com.example.quizapi.screens.factory
-import com.example.quizapi.screens.game.GameViewModel
 
-class MenuFragment: Fragment(R.layout.fragment_menu) {
+class MenuFragment: Fragment() {
 
     private lateinit var binding: FragmentMenuBinding
     private lateinit var preferences: SharedPreferences
     private lateinit var themesAdapter: ThemesAdapter
     private val viewModel: MenuViewModel by viewModels{ factory() }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_menu, container, false)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMenuBinding.bind(view)
@@ -28,7 +37,7 @@ class MenuFragment: Fragment(R.layout.fragment_menu) {
 
 
         binding.startButton.setOnClickListener{
-            findNavController().navigate(R.id.action_menuFragment_to_gameFragment)
+            navigator().openGameScreen()
         }
         setupRecyclerView()
         viewModel.themesList.observe(viewLifecycleOwner){
@@ -37,10 +46,26 @@ class MenuFragment: Fragment(R.layout.fragment_menu) {
         themesAdapter.onItemClickListener = {
             viewModel.changeItem(it)
         }
+        binding.errorButton.setOnClickListener {
+            viewModel.getList()
+        }
+        viewModel.error.observe(viewLifecycleOwner){
+            if(it){
+                binding.themesRecyclerView.visibility = View.INVISIBLE
+                binding.errorButton.visibility = View.VISIBLE
+
+            }
+            else{
+                binding.themesRecyclerView.visibility = View.VISIBLE
+                binding.errorButton.visibility = View.INVISIBLE
+            }
+        }
     }
 
     private fun setupRecyclerView(){
         themesAdapter = ThemesAdapter()
         binding.themesRecyclerView.adapter = themesAdapter
     }
+
+
 }

@@ -17,7 +17,6 @@ class MenuViewModel(private val themesRepository: ThemesRepository) : ViewModel(
     val themesList:LiveData<List<Theme>> = _themesList
     init{
        getList()
-
     }
 
 
@@ -25,7 +24,7 @@ class MenuViewModel(private val themesRepository: ThemesRepository) : ViewModel(
         _themesList.value = themesRepository.changeActiveById(theme.id)
     }
 
-    private fun getList(){
+    fun getList(){
         viewModelScope.launch{
             _error.value = false
             try {

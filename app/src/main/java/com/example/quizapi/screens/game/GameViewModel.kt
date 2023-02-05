@@ -46,8 +46,7 @@ class GameViewModel(
     private val _disabled= MutableLiveData<Boolean>()
     val disabled: LiveData<Boolean> = _disabled
 
-    init{
-        startSession()
+    init {
         startTimer()
     }
     fun checkAnswer(buttonId: Int){
@@ -68,7 +67,9 @@ class GameViewModel(
             delay(500)
             _buttonId.value = buttonId+8
             _disabled.value = false
-            if (_lives.value!! <= 0) _end.value = _score.value
+            if (_lives.value!! <= 0) {
+                _end.value = _score.value
+            }
 
             else loadRound()
         }
@@ -92,9 +93,10 @@ class GameViewModel(
     }
 
     }
-    private fun startSession(){
+     fun startSession(){
         _score.value = 0
         _lives.value = 3
+        _end.value = -1
         loadRound()
     }
 
