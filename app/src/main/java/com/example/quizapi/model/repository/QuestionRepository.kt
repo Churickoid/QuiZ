@@ -1,7 +1,8 @@
-package com.example.quizapi.model
+package com.example.quizapi.model.repository
 
 
 import com.example.quizapi.data.ApiInterface
+import com.example.quizapi.model.Round
 
 
 class QuestionRepository(

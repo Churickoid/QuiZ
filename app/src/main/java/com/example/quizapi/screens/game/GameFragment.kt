@@ -18,6 +18,7 @@ import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentGameBinding
 import com.example.quizapi.navigation.navigator
 import com.example.quizapi.screens.factory
+import java.util.concurrent.TimeoutException
 
 class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
     private lateinit var binding: FragmentGameBinding
@@ -33,6 +34,8 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        preferences =
+            requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
         binding = FragmentGameBinding.bind(view)
 
         binding.answer1Button.setOnClickListener(this)
@@ -41,7 +44,11 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
         binding.answer4Button.setOnClickListener(this)
 
         binding.errorButton.setOnClickListener(this)
-        viewModel.startSession()
+
+        if (viewModel.getResetValue()){
+            viewModel.startSession()
+        }
+
         viewModel.round.observe(viewLifecycleOwner){
             binding.categoryTextView.text = getString(R.string.category, it.category)
             binding.questionTextView.text = it.question
@@ -64,25 +71,24 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
             }
 
         }
-        viewModel.panel.observe(viewLifecycleOwner){
-            if(it){
-                binding.loading.visibility = View.INVISIBLE
-                binding.buttonsLL.visibility = View.VISIBLE
-            }
-            else{
-                binding.loading.visibility = View.VISIBLE
-                binding.buttonsLL.visibility = View.INVISIBLE
-            }
-        }
-        viewModel.error.observe(viewLifecycleOwner){
-            if(it){
-                binding.loading.visibility = View.INVISIBLE
-                binding.errorButton.visibility = View.VISIBLE
-
-            }
-            else{
-                binding.loading.visibility = View.VISIBLE
-                binding.errorButton.visibility = View.INVISIBLE
+        viewModel.panel.observe(viewLifecycleOwner) {
+            when (it) {
+                0 -> {
+                    binding.loading.visibility = View.VISIBLE
+                    binding.buttonsLL.visibility = View.INVISIBLE
+                    binding.errorButton.visibility = View.INVISIBLE
+                }
+                1 -> {
+                    binding.loading.visibility = View.INVISIBLE
+                    binding.buttonsLL.visibility = View.VISIBLE
+                    binding.errorButton.visibility = View.INVISIBLE
+                }
+                2 -> {
+                    binding.loading.visibility = View.INVISIBLE
+                    binding.buttonsLL.visibility = View.INVISIBLE
+                    binding.errorButton.visibility = View.VISIBLE
+                }
+                else -> throw Exception("Unknown value")
             }
         }
         viewModel.buttonId.observe(viewLifecycleOwner){
@@ -94,9 +100,7 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
             }
         }
         viewModel.end.observe(viewLifecycleOwner){
-            if (it>-1) {
-                preferences =
-                    requireActivity().getSharedPreferences(APP_PREFERENCE, Context.MODE_PRIVATE)
+            if(it>=0) {
                 if (it > preferences.getInt(SCORE_VALUE, 0))
                     preferences.edit()
                         .putInt(SCORE_VALUE, it)
@@ -104,9 +108,8 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
 
                 navigator().openEndScreen(it)
             }
-
         }
-        viewModel.disabled.observe(viewLifecycleOwner){
+        viewModel.disableButtons.observe(viewLifecycleOwner){
             if(it){
                 binding.answer1Button.isClickable = false
                 binding.answer2Button.isClickable = false
@@ -129,7 +132,8 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
             R.id.answer2Button -> viewModel.checkAnswer(1)
             R.id.answer3Button -> viewModel.checkAnswer(2)
             R.id.answer4Button -> viewModel.checkAnswer(3)
-            else -> viewModel.loadRound()
+            R.id.errorButton -> viewModel.loadRound()
+            else -> throw TimeoutException("No Element")
         }
     }
 

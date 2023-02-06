@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizapi.model.Theme
-import com.example.quizapi.model.ThemesRepository
+import com.example.quizapi.model.repository.ThemesRepository
 import kotlinx.coroutines.launch
 
 class MenuViewModel(private val themesRepository: ThemesRepository) : ViewModel() {

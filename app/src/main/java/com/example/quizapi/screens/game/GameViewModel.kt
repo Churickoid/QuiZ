@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.quizapi.model.QuestionRepository
+import com.example.quizapi.model.repository.QuestionRepository
 import com.example.quizapi.model.Round
 
 import kotlinx.coroutines.delay
@@ -21,7 +21,7 @@ class GameViewModel(
     private val _round = MutableLiveData<Round>()
     val round: LiveData<Round> = _round
 
-    var oneButtonClicked = true
+    private var resetScreen = true
 
     private val _lives = MutableLiveData<Int>()
     private val _score = MutableLiveData<Int>()
@@ -31,11 +31,8 @@ class GameViewModel(
     val score: LiveData<Int> = _score
     val timer: LiveData<Int> = _timer
 
-    private val _panel = MutableLiveData(true)
-    val panel: LiveData<Boolean> = _panel
-
-    private val _error = MutableLiveData(false)
-    val error: LiveData<Boolean> = _error
+    private val _panel = MutableLiveData(1)
+    val panel: LiveData<Int> = _panel
 
     private val _buttonId = MutableLiveData<Int>()
     val buttonId: LiveData<Int> = _buttonId
@@ -43,16 +40,17 @@ class GameViewModel(
     private val _end= MutableLiveData<Int>()
     val end: LiveData<Int> = _end
 
-    private val _disabled= MutableLiveData<Boolean>()
-    val disabled: LiveData<Boolean> = _disabled
+    private val _disableButtons= MutableLiveData<Boolean>()
+    val disableButtons: LiveData<Boolean> = _disableButtons
+    private var oneButtonClickedChecker = true
 
     init {
         startTimer()
     }
     fun checkAnswer(buttonId: Int){
-        if (!oneButtonClicked) return
-        oneButtonClicked= false
-        _disabled.value = true
+        if (!oneButtonClickedChecker) return
+        oneButtonClickedChecker= false
+        _disableButtons.value = true
         if (getCorrectAnswer()== getCurrentAnswer(buttonId)){
             _score.value = _score.value!! + 1
             _buttonId.value = buttonId
@@ -63,12 +61,13 @@ class GameViewModel(
         }
 
         viewModelScope.launch(){
-            _timer.value = -1
+            _timer.value = OFF_TIMER_VALUE
             delay(500)
             _buttonId.value = buttonId+8
-            _disabled.value = false
-            if (_lives.value!! <= 0) {
+            _disableButtons.value = false
+            if (_lives.value == 0) {
                 _end.value = _score.value
+                resetScreen = true
             }
 
             else loadRound()
@@ -77,27 +76,32 @@ class GameViewModel(
     }
 
 
-    fun loadRound() {
+     fun loadRound() {
         viewModelScope.launch{
-            _panel.value = false
-            _error.value = false
+            _panel.value = PROGRESSBAR_PANEL
             try {
-                oneButtonClicked= true
+                oneButtonClickedChecker= true
                 _round.value = repository.getQuestion()
-                _panel.value = true
-                _timer.value = 30
+                _panel.value = BUTTONS_PANEL
+                _timer.value = DEFAULT_TIMER_VALUE
             }
             catch(e: Exception){
-                _error.value = true
+                _panel.value = ERROR_PANEL
             }
-    }
+        }
 
     }
-     fun startSession(){
-        _score.value = 0
-        _lives.value = 3
+    fun getResetValue():Boolean{
+        return resetScreen
+    }
+    fun startSession(){
+        _score.value = DEFAULT_SCORE_VALUE
+        _lives.value = DEFAULT_LIVES_VALUE
         _end.value = -1
+        resetScreen  = false
         loadRound()
+
+
     }
 
     private fun getCorrectAnswer():String{
@@ -108,18 +112,32 @@ class GameViewModel(
         return round.value!!.answers[buttonId]
     }
     private fun startTimer(){
+        _timer.value = OFF_TIMER_VALUE
         viewModelScope.launch() {
-            _timer.value = -1
             tick()
         }
     }
     private suspend fun tick(){
         _timer.postValue(_timer.value!! - 1)
-        if (_timer.value == 0){
+        if (_timer.value == END_TIMER_VALUE){
             checkAnswer(4)
         }
         delay(1000)
         tick()
+    }
+    companion object{
+        const val DEFAULT_LIVES_VALUE = 3
+        const val DEFAULT_SCORE_VALUE = 0
+        const val DEFAULT_TIMER_VALUE = 30
+
+        const val END_TIMER_VALUE = 0
+        const val OFF_TIMER_VALUE = -1
+
+        const val PROGRESSBAR_PANEL = 0
+        const val BUTTONS_PANEL = 1
+        const val ERROR_PANEL = 2
+
+
     }
 
 }

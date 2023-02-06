@@ -1,8 +1,8 @@
 package com.example.quizapi.DI
 
 import com.example.quizapi.data.ApiInterface
-import com.example.quizapi.model.QuestionRepository
-import com.example.quizapi.model.ThemesRepository
+import com.example.quizapi.model.repository.QuestionRepository
+import com.example.quizapi.model.repository.ThemesRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
