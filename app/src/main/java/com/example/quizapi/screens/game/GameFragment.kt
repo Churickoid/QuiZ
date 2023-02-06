@@ -47,6 +47,8 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
 
         if (viewModel.getResetValue()){
             viewModel.startSession()
+            val request = arguments?.getString(API_REQUEST) ?: ""
+            viewModel.setApiAndLoad(request)
         }
 
         viewModel.round.observe(viewLifecycleOwner){
@@ -150,6 +152,17 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
             else -> R.id.answer4Button
         }
 
+    }
+    fun newInstance(requestApi: String): GameFragment{
+        val args = Bundle()
+        args.putString(API_REQUEST,requestApi)
+        val fragment = GameFragment()
+        fragment.arguments = args
+        return fragment
+    }
+    companion object{
+
+        private const val API_REQUEST = "API_REQUEST"
     }
 
 }

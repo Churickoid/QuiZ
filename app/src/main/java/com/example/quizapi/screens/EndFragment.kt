@@ -53,8 +53,6 @@ class EndFragment: Fragment() {
         return fragment
     }
     companion object{
-
         private const val CURRENT_SCORE = "CURRENT_SCORE"
-
     }
 }

@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity(), Navigator {
         launchFragment(EndFragment().newInstance(currentScore))
     }
 
-    override fun openGameScreen() {
-        launchFragment(GameFragment())
+    override fun openGameScreen(requestApi: String) {
+        launchFragment(GameFragment().newInstance(requestApi))
     }
 
     override fun goBack() {

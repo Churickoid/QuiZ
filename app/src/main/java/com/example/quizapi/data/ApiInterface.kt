@@ -7,9 +7,9 @@ import retrofit2.http.Query
 
 interface ApiInterface{
     @GET("api/questions")
-    suspend fun getQuestionList(@Query("limit") num:Int = 1 ): List<Round>
+    suspend fun getQuestionList(@Query("categories") themes:String = "general_knowledge,arts_and_literature,film_and_tv,food_and_drink,geography,history,science,music,society_and_culture,sport_and_leisure" ): List<Round>
 
     @GET("api/categories")
-    suspend fun getThemesList(@Query("limit") num:Int = 1 ): Map<String, Array<String>>
+    suspend fun getThemesList(): Map<String, Array<String>>
 
 }

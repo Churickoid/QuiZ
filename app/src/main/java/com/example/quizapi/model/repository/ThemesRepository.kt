@@ -24,4 +24,14 @@ class ThemesRepository (private val retrofit: ApiInterface){
         return themes
     }
 
+    fun unselectAllActive():List<Theme>{
+        val list = themes
+        themes = arrayListOf()
+        for (i in list){
+            themes += i.copy(isActive = false)
+        }
+        return themes
+
+    }
+
 }

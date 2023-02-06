@@ -2,6 +2,7 @@ package com.example.quizapi.screens.game
 
 
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,7 @@ class GameViewModel(
     val round: LiveData<Round> = _round
 
     private var resetScreen = true
+    private var requestApi:String = ""
 
     private val _lives = MutableLiveData<Int>()
     private val _score = MutableLiveData<Int>()
@@ -75,13 +77,16 @@ class GameViewModel(
 
     }
 
-
+    fun setApiAndLoad(request:String){
+        requestApi = request
+        loadRound()
+    }
      fun loadRound() {
         viewModelScope.launch{
             _panel.value = PROGRESSBAR_PANEL
             try {
                 oneButtonClickedChecker= true
-                _round.value = repository.getQuestion()
+                _round.value = repository.getQuestion(requestApi)
                 _panel.value = BUTTONS_PANEL
                 _timer.value = DEFAULT_TIMER_VALUE
             }
@@ -99,8 +104,6 @@ class GameViewModel(
         _lives.value = DEFAULT_LIVES_VALUE
         _end.value = -1
         resetScreen  = false
-        loadRound()
-
 
     }
 
@@ -126,18 +129,16 @@ class GameViewModel(
         tick()
     }
     companion object{
-        const val DEFAULT_LIVES_VALUE = 3
-        const val DEFAULT_SCORE_VALUE = 0
-        const val DEFAULT_TIMER_VALUE = 30
+        private const val DEFAULT_LIVES_VALUE = 3
+        private const val DEFAULT_SCORE_VALUE = 0
+        private const val DEFAULT_TIMER_VALUE = 30
 
-        const val END_TIMER_VALUE = 0
-        const val OFF_TIMER_VALUE = -1
+        private const val END_TIMER_VALUE = 0
+        private const val OFF_TIMER_VALUE = -1
 
-        const val PROGRESSBAR_PANEL = 0
-        const val BUTTONS_PANEL = 1
-        const val ERROR_PANEL = 2
-
-
+        private const val PROGRESSBAR_PANEL = 0
+        private const val BUTTONS_PANEL = 1
+        private const val ERROR_PANEL = 2
     }
 
 }

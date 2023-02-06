@@ -9,8 +9,9 @@ class QuestionRepository(
     private val retrofit: ApiInterface
 ) {
 
-    suspend fun getQuestion(): Round {
-        val response = retrofit.getQuestionList()
+    suspend fun getQuestion(requestThemes: String): Round {
+        val response = if(requestThemes=="") retrofit.getQuestionList()
+        else retrofit.getQuestionList(requestThemes)
 
         val round = response[0]
         round.answers += round.correct

@@ -1,5 +1,6 @@
 package com.example.quizapi.screens.menu
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,8 +21,23 @@ class MenuViewModel(private val themesRepository: ThemesRepository) : ViewModel(
     }
 
 
+    fun generateApiRequest():String{
+        if(themesList.value == null) return ""
+        var request = ""
+        for (i in themesList.value!!){
+            if (i.isActive){
+            request += i.themeRequest
+            request += ","
+            }
+        }
+        return request
+    }
     fun changeItem(theme:Theme){
         _themesList.value = themesRepository.changeActiveById(theme.id)
+    }
+
+    fun unselectAll(){
+        _themesList.value =  themesRepository.unselectAllActive()
     }
 
     fun getList(){

@@ -37,7 +37,7 @@ class MenuFragment: Fragment() {
 
 
         binding.startButton.setOnClickListener{
-            navigator().openGameScreen()
+            navigator().openGameScreen(viewModel.generateApiRequest())
         }
         setupRecyclerView()
         viewModel.themesList.observe(viewLifecycleOwner){
@@ -48,6 +48,9 @@ class MenuFragment: Fragment() {
         }
         binding.errorButton.setOnClickListener {
             viewModel.getList()
+        }
+        binding.unselectTextView.setOnClickListener {
+            viewModel.unselectAll()
         }
         viewModel.error.observe(viewLifecycleOwner){
             if(it){

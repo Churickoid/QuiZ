@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 
 interface Navigator {
     fun openEndScreen(currentScore:Int)
-    fun openGameScreen()
+    fun openGameScreen(requestApi:String)
     fun goBack()
     fun goToMenu()
 }
