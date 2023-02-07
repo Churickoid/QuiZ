@@ -22,6 +22,9 @@ class GameViewModel(
     private val _round = MutableLiveData<Round>()
     val round: LiveData<Round> = _round
 
+    private val _numRound = MutableLiveData<Int>()
+    val numRound : LiveData<Int> = _numRound
+
     private var resetScreen = true
     private var requestApi:String = ""
 
@@ -64,7 +67,7 @@ class GameViewModel(
 
         viewModelScope.launch(){
             _timer.value = OFF_TIMER_VALUE
-            delay(500)
+            delay(600)
             _buttonId.value = buttonId+8
             _disableButtons.value = false
             if (_lives.value == 0) {
@@ -87,8 +90,9 @@ class GameViewModel(
             try {
                 oneButtonClickedChecker= true
                 _round.value = repository.getQuestion(requestApi)
-                _panel.value = BUTTONS_PANEL
                 _timer.value = DEFAULT_TIMER_VALUE
+                _panel.value = BUTTONS_PANEL
+                _numRound.value = _numRound.value!! + 1
             }
             catch(e: Exception){
                 _panel.value = ERROR_PANEL
@@ -102,6 +106,7 @@ class GameViewModel(
     fun startSession(){
         _score.value = DEFAULT_SCORE_VALUE
         _lives.value = DEFAULT_LIVES_VALUE
+        _numRound.value = 0
         _end.value = -1
         resetScreen  = false
 
@@ -115,17 +120,17 @@ class GameViewModel(
         return round.value!!.answers[buttonId]
     }
     private fun startTimer(){
-        _timer.value = OFF_TIMER_VALUE
+        _timer.value = DEFAULT_TIMER_VALUE
         viewModelScope.launch() {
             tick()
         }
     }
     private suspend fun tick(){
-        _timer.postValue(_timer.value!! - 1)
         if (_timer.value == END_TIMER_VALUE){
             checkAnswer(4)
         }
         delay(1000)
+        _timer.postValue(_timer.value!! - 1)
         tick()
     }
     companion object{

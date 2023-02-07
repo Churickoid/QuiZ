@@ -17,6 +17,7 @@ import com.example.quizapi.MainActivity.Companion.SCORE_VALUE
 import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentGameBinding
 import com.example.quizapi.navigation.navigator
+import com.example.quizapi.navigation.statusBar
 import com.example.quizapi.screens.factory
 import java.util.concurrent.TimeoutException
 
@@ -49,6 +50,10 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
             viewModel.startSession()
             val request = arguments?.getString(API_REQUEST) ?: ""
             viewModel.setApiAndLoad(request)
+        }
+        viewModel.numRound.observe(viewLifecycleOwner){
+            if (it == 0)  statusBar().changeTitle("Question")
+            else statusBar().changeTitle("Question $it")
         }
 
         viewModel.round.observe(viewLifecycleOwner){

@@ -11,6 +11,7 @@ import com.example.quizapi.MainActivity
 import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentMenuBinding
 import com.example.quizapi.navigation.navigator
+import com.example.quizapi.navigation.statusBar
 import com.example.quizapi.screens.factory
 
 class MenuFragment: Fragment() {
@@ -20,6 +21,11 @@ class MenuFragment: Fragment() {
     private lateinit var themesAdapter: ThemesAdapter
     private val viewModel: MenuViewModel by viewModels{ factory() }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        statusBar().changeTitle("Main Menu")
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

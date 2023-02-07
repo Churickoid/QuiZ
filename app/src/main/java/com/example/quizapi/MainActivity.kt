@@ -6,12 +6,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.quizapi.databinding.ActivityMainBinding
 import com.example.quizapi.navigation.Navigator
+import com.example.quizapi.navigation.StatusBar
 import com.example.quizapi.screens.EndFragment
 import com.example.quizapi.screens.game.GameFragment
 import com.example.quizapi.screens.menu.MenuFragment
 
 
-class MainActivity : AppCompatActivity(), Navigator {
+class MainActivity : AppCompatActivity(), Navigator, StatusBar {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -55,5 +56,9 @@ class MainActivity : AppCompatActivity(), Navigator {
             .addToBackStack(null)
             .replace(R.id.fragmentContainer, fragment)
             .commit()
+    }
+
+    override fun changeTitle(title: String) {
+        supportActionBar?.title = title
     }
 }

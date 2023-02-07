@@ -14,11 +14,16 @@ import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentEndBinding
 import com.example.quizapi.databinding.FragmentMenuBinding
 import com.example.quizapi.navigation.navigator
+import com.example.quizapi.navigation.statusBar
 
 class EndFragment: Fragment() {
     private lateinit var binding: FragmentEndBinding
     private lateinit var preferences: SharedPreferences
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        statusBar().changeTitle("End")
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
