@@ -8,6 +8,7 @@ import com.example.quizapi.screens.game.GameViewModel
 import com.example.quizapi.screens.menu.MenuViewModel
 import java.lang.IllegalStateException
 
+@Suppress("UNCHECKED_CAST")
 class ViewModelFactory(private val app: App) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -22,6 +23,7 @@ class ViewModelFactory(private val app: App) : ViewModelProvider.Factory {
                 throw IllegalStateException("Unknown View model class")
             }
         }
+
         return viewModel as T
     }
 

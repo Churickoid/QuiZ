@@ -3,7 +3,6 @@ package com.example.quizapi.screens.game
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.service.autofill.OnClickAction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +10,19 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.quizapi.MainActivity.Companion.APP_PREFERENCE
 import com.example.quizapi.MainActivity.Companion.SCORE_VALUE
 import com.example.quizapi.R
 import com.example.quizapi.databinding.FragmentGameBinding
 import com.example.quizapi.navigation.navigator
-import com.example.quizapi.navigation.statusBar
+import com.example.quizapi.navigation.stringTools
 import com.example.quizapi.screens.factory
 import java.util.concurrent.TimeoutException
 
-class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
+class GameFragment : Fragment(), View.OnClickListener, View.OnLongClickListener {
     private lateinit var binding: FragmentGameBinding
-    private val viewModel: GameViewModel by viewModels{ factory() }
-    private lateinit var preferences:SharedPreferences
+    private val viewModel: GameViewModel by viewModels { factory() }
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +31,7 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
     ): View? {
         return inflater.inflate(R.layout.fragment_game, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         preferences =
@@ -46,17 +45,17 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
 
         binding.errorButton.setOnClickListener(this)
 
-        if (viewModel.getResetValue()){
+        if (viewModel.getResetValue()) {
             viewModel.startSession()
             val request = arguments?.getString(API_REQUEST) ?: ""
             viewModel.setApiAndLoad(request)
         }
-        viewModel.numRound.observe(viewLifecycleOwner){
-            if (it == 0)  statusBar().changeTitle("Question")
-            else statusBar().changeTitle("Question $it")
+        viewModel.numRound.observe(viewLifecycleOwner) {
+            if (it == 0) stringTools().changeTitle("Question")
+            else stringTools().changeTitle("Question $it")
         }
 
-        viewModel.round.observe(viewLifecycleOwner){
+        viewModel.round.observe(viewLifecycleOwner) {
             binding.categoryTextView.text = getString(R.string.category, it.category)
             binding.questionTextView.text = it.question
             binding.answer1Button.text = it.answers[0]
@@ -65,14 +64,14 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
             binding.answer4Button.text = it.answers[3]
         }
 
-        viewModel.lives.observe(viewLifecycleOwner){
+        viewModel.lives.observe(viewLifecycleOwner) {
             binding.lifeTextView.text = getString(R.string.lives, it)
         }
-        viewModel.score.observe(viewLifecycleOwner){
+        viewModel.score.observe(viewLifecycleOwner) {
             binding.scoreTextView.text = getString(R.string.total_score, it)
         }
-        viewModel.timer.observe(viewLifecycleOwner){
-            if (it >= 0){
+        viewModel.timer.observe(viewLifecycleOwner) {
+            if (it >= 0) {
                 binding.timerTextView.text = it.toString()
                 binding.timerProgressBar.progress = it
             }
@@ -98,16 +97,31 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
                 else -> throw Exception("Unknown value")
             }
         }
-        viewModel.buttonId.observe(viewLifecycleOwner){
+        viewModel.buttonId.observe(viewLifecycleOwner) {
             val currentButton = view.findViewById<Button>(getButtonId(it))
-            when(it/4){
-                0 -> currentButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-                1 -> currentButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
-                else -> currentButton.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
+            when (it / 4) {
+                0 -> currentButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.green
+                    )
+                )
+                1 -> currentButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.red
+                    )
+                )
+                else -> currentButton.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.purple_500
+                    )
+                )
             }
         }
-        viewModel.end.observe(viewLifecycleOwner){
-            if(it>=0) {
+        viewModel.end.observe(viewLifecycleOwner) {
+            if (it >= 0) {
                 if (it > preferences.getInt(SCORE_VALUE, 0))
                     preferences.edit()
                         .putInt(SCORE_VALUE, it)
@@ -116,14 +130,13 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
                 navigator().openEndScreen(it)
             }
         }
-        viewModel.disableButtons.observe(viewLifecycleOwner){
-            if(it){
+        viewModel.disableButtons.observe(viewLifecycleOwner) {
+            if (it) {
                 binding.answer1Button.isClickable = false
                 binding.answer2Button.isClickable = false
                 binding.answer3Button.isClickable = false
                 binding.answer4Button.isClickable = false
-            }
-            else{
+            } else {
                 binding.answer1Button.isClickable = true
                 binding.answer2Button.isClickable = true
                 binding.answer3Button.isClickable = true
@@ -134,7 +147,7 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
     }
 
     override fun onClick(v: View) {
-        when(v.id){
+        when (v.id) {
             R.id.answer1Button -> viewModel.checkAnswer(0)
             R.id.answer2Button -> viewModel.checkAnswer(1)
             R.id.answer3Button -> viewModel.checkAnswer(2)
@@ -149,8 +162,8 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
     }
 
 
-    private fun getButtonId(id: Int): Int{
-        return when(id%4){
+    private fun getButtonId(id: Int): Int {
+        return when (id % 4) {
             0 -> R.id.answer1Button
             1 -> R.id.answer2Button
             2 -> R.id.answer3Button
@@ -158,14 +171,16 @@ class GameFragment: Fragment(), View.OnClickListener,View.OnLongClickListener{
         }
 
     }
-    fun newInstance(requestApi: String): GameFragment{
+
+    fun newInstance(requestApi: String): GameFragment {
         val args = Bundle()
-        args.putString(API_REQUEST,requestApi)
+        args.putString(API_REQUEST, requestApi)
         val fragment = GameFragment()
         fragment.arguments = args
         return fragment
     }
-    companion object{
+
+    companion object {
 
         private const val API_REQUEST = "API_REQUEST"
     }

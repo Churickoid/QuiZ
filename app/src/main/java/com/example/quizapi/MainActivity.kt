@@ -1,18 +1,18 @@
 package com.example.quizapi
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.quizapi.databinding.ActivityMainBinding
 import com.example.quizapi.navigation.Navigator
-import com.example.quizapi.navigation.StatusBar
+import com.example.quizapi.navigation.StringTools
 import com.example.quizapi.screens.EndFragment
 import com.example.quizapi.screens.game.GameFragment
 import com.example.quizapi.screens.menu.MenuFragment
 
 
-class MainActivity : AppCompatActivity(), Navigator, StatusBar {
+class MainActivity : AppCompatActivity(), Navigator, StringTools {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), Navigator, StatusBar {
     }
 
     override fun goToMenu() {
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     private fun launchFragment(fragment: Fragment) {
@@ -61,4 +61,6 @@ class MainActivity : AppCompatActivity(), Navigator, StatusBar {
     override fun changeTitle(title: String) {
         supportActionBar?.title = title
     }
+
+
 }

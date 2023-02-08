@@ -1,4 +1,4 @@
-package com.example.quizapi.DI
+package com.example.quizapi.di
 
 import com.example.quizapi.data.ApiInterface
 import com.example.quizapi.model.repository.QuestionRepository
@@ -19,7 +19,7 @@ class DIContainer {
         .build()
 
 
-     val retrofit = Retrofit.Builder()
+    private val retrofit = Retrofit.Builder()
         .baseUrl("https://the-trivia-api.com")
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.quizapi.screens.game.GameFragment"
-    >
+    tools:context="com.example.quizapi.screens.game.GameFragment">
 
     <TextView
         android:id="@+id/categoryTextView"
@@ -16,79 +15,81 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/timerProgressBar"
+        style="@style/CircularDeterminateProgressBar"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:max="30"
+        android:progress="30"
         app:layout_constraintBottom_toTopOf="@id/lifeTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categoryTextView"
-        android:max="30"
-        android:progress="30"
-        style="@style/CircularDeterminateProgressBar"
-        />
+        app:layout_constraintTop_toBottomOf="@id/categoryTextView" />
+
     <TextView
         android:id="@+id/timerTextView"
-        android:text="@string/timer_default_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/timer_default_value"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/timerProgressBar"
         app:layout_constraintEnd_toEndOf="@id/timerProgressBar"
         app:layout_constraintStart_toStartOf="@id/timerProgressBar"
-        app:layout_constraintTop_toTopOf="@id/timerProgressBar"/>
+        app:layout_constraintTop_toTopOf="@id/timerProgressBar" />
+
     <TextView
         android:id="@+id/lifeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:text="@string/lives"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/timerProgressBar"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/timerProgressBar"
-        app:layout_constraintTop_toTopOf="@id/timerProgressBar"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/timerProgressBar" />
+
     <TextView
         android:id="@+id/scoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:text="@string/total_score"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/timerProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/timerProgressBar"
-        app:layout_constraintTop_toTopOf="@id/timerProgressBar"/>
+        app:layout_constraintTop_toTopOf="@id/timerProgressBar" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25"
-        />
+        app:layout_constraintGuide_percent="0.25" />
+
     <ProgressBar
         android:id="@+id/loading"
-        android:visibility="invisible"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/guideline"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="@id/guideline" />
+
     <Button
         android:id="@+id/errorButton"
-        android:visibility="invisible"
-        android:text="@string/try_again"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/try_again"
+        android:visibility="invisible"
 
-        app:layout_constraintTop_toTopOf="@id/guideline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="@id/guideline" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonsLL"
@@ -117,7 +118,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Question"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </ScrollView>
@@ -126,8 +126,8 @@
             android:id="@+id/answer1Button"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
             android:splitMotionEvents="false"
             android:text="@string/answer"
             android:textAllCaps="false"
@@ -142,8 +142,8 @@
             android:id="@+id/answer2Button"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
             android:splitMotionEvents="false"
             android:text="@string/answer"
             android:textAllCaps="false"
@@ -158,8 +158,8 @@
             android:id="@+id/answer3Button"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
             android:splitMotionEvents="false"
             android:text="@string/answer"
             android:textAllCaps="false"
@@ -174,8 +174,8 @@
             android:id="@+id/answer4Button"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
             android:splitMotionEvents="false"
             android:text="@string/answer"
             android:textAllCaps="false"

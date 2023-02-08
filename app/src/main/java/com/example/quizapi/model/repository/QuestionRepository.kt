@@ -9,12 +9,12 @@ class QuestionRepository(
     private val retrofit: ApiInterface
 ) {
 
-    var questionList = listOf<Round>()
-    var currentRequest = ""
-    var counter = 0
+    private var questionList = listOf<Round>()
+    private var currentRequest = ""
+    private var counter = 0
 
     suspend fun getQuestion(requestThemes: String): Round {
-        if (counter >= 50 || questionList.isEmpty() || currentRequest != requestThemes){
+        if (counter >= 50 || questionList.isEmpty() || currentRequest != requestThemes) {
             getListOfQuestions(requestThemes)
         }
         val round = questionList[counter]
@@ -23,8 +23,9 @@ class QuestionRepository(
         counter++
         return round
     }
+
     private suspend fun getListOfQuestions(requestThemes: String) {
-        questionList = if(requestThemes=="") retrofit.getQuestionList()
+        questionList = if (requestThemes == "") retrofit.getQuestionList()
         else retrofit.getQuestionList(themes = requestThemes)
         currentRequest = requestThemes
         counter = 0

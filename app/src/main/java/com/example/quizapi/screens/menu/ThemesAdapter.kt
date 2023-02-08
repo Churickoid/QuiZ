@@ -1,6 +1,5 @@
 package com.example.quizapi.screens.menu
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +12,10 @@ import com.example.quizapi.R
 import com.example.quizapi.model.Theme
 
 
-
-class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
+class ThemesAdapter : RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
     var themeList = listOf<Theme>()
-        set(value){
-            val callback = ThemesDiffCallback(themeList,value)
+        set(value) {
+            val callback = ThemesDiffCallback(themeList, value)
             val difResult = DiffUtil.calculateDiff(callback)
             difResult.dispatchUpdatesTo(this)
             field = value
@@ -25,7 +23,7 @@ class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
     var onItemClickListener: ((Theme) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThemesViewHolder {
-        val view= LayoutInflater.from(parent.context).inflate(R.layout.item_theme,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_theme, parent, false)
         return ThemesViewHolder(view)
     }
 
@@ -43,7 +41,7 @@ class ThemesAdapter: RecyclerView.Adapter<ThemesAdapter.ThemesViewHolder>() {
 
     }
 
-    class ThemesViewHolder(itemView: View) : ViewHolder(itemView){
+    class ThemesViewHolder(itemView: View) : ViewHolder(itemView) {
         val themeText = itemView.findViewById<TextView>(R.id.themeTextView)!!
         val themeCheckBox = itemView.findViewById<CheckBox>(R.id.themeCheckBox)!!
     }
