@@ -8,10 +8,10 @@ Version (1.0) [Link](versions/quizAPI.apk)
 
 Screenshots
 -----------
-![MainMenuFragment](screenshots/1.jpg "Main Menu")
-![QuestionFragment](screenshots/2.jpg "Question (correct)")
-![QuestionFragment](screenshots/3.jpg "Question (incorrect)")
-![ResultFragment](screenshots/4.jpg "Result")
+<img src="screenshots/1.jpg" width="360">
+<img src="screenshots/2.jpg" width="360">
+<img src="screenshots/3.jpg" width="360">
+<img src="screenshots/4.jpg" width="360">
 
 
 Application features
