@@ -9,9 +9,9 @@ Version (1.0) [Link](versions/quizAPI.apk)
 Screenshots
 -----------
 ![MainMenuFragment](screenshots/1.jpg "Main Menu")
-![QuestionFragment](screenshots/Screenshot_2.jpg "Question (correct)")
+![QuestionFragment](screenshots/2.jpg "Question (correct)")
 ![QuestionFragment](screenshots/3.jpg "Question (incorrect)")
-![ResultFragment](screenshots/Screenshot_4.jpg "Result")
+![ResultFragment](screenshots/4.jpg "Result")
 
 
 Application features
